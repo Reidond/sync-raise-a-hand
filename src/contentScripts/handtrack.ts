@@ -4,7 +4,6 @@ import { RAISE_HAND_ICON_SELECTOR } from '~/utils/constants'
 let model: any = null
 let timerID: any = null
 let videoEl: HTMLVideoElement | null = null
-let isRaiseHand = false
 
 const OPTIONS = {
   flipHorizontal: false,
@@ -27,21 +26,16 @@ export const initialize = async() => {
 const toggleRiseHandButton = (predictions: { label: string }[]) => {
   // Google's html class name is about to change, so I'm referring to the button from icon.
   const raiseHandButton = document.querySelector<HTMLElement>(RAISE_HAND_ICON_SELECTOR)?.closest('button')
-  raiseHandButton?.closest('span')?.classList.add(raiseButtonClass)
+  const raiseHandButtonClasslist = raiseHandButton?.closest('span')?.classList
+  raiseHandButtonClasslist?.add(raiseButtonClass)
 
   if (predictions.some((p: any) => p.label === 'open')) {
-    if (!isRaiseHand) {
-      isRaiseHand = true
-      raiseHandButton?.closest('span')?.classList.add(raiseButtonRaisedClass)
-      raiseHandButton?.click()
-    }
+    raiseHandButtonClasslist?.add(raiseButtonRaisedClass)
+    raiseHandButton?.click()
   }
   else {
-    if (isRaiseHand) {
-      isRaiseHand = false
-      raiseHandButton?.closest('span')?.classList.remove(raiseButtonRaisedClass)
-      raiseHandButton?.click()
-    }
+    raiseHandButtonClasslist?.remove(raiseButtonRaisedClass)
+    raiseHandButton?.click()
   }
 }
 
