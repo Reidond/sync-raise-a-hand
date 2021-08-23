@@ -11,15 +11,16 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { CHANGE_TRACK_STATUS, CHECK_TRACK_STATUS, ON_ICON_PATH, OFF_ICON_PATH } from '~/utils/constants'
+import { CHANGE_TRACK_STATUS, CHECK_TRACK_STATUS } from '~/utils/constants'
 
-type RequestArgs = {
+type RequestArgs<T> = {
   type: string
+  value?: T
 }
-const sendMessageToCurrentTab = (message: RequestArgs, callback?: (...any) => void) => {
+const sendMessageToCurrentTab = <T>(message: RequestArgs<T>, callback?: (...args : unknown[]) => void) => {
   chrome.tabs.query({ active: true, currentWindow: true }, async(tabs) => {
     const currentTab = tabs[0]
-    chrome.tabs.sendMessage(currentTab.id, message, callback)
+    chrome.tabs.sendMessage(currentTab.id!, message, callback)
   })
 }
 
